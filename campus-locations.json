@@ -1,0 +1,34 @@
+{
+  "campus": {
+    "name": "Axis Knowledge City",
+    "city": "Rooma, Kanpur, Uttar Pradesh",
+    "reference": { "name": "Axis Colleges Canteen/Cafeteria", "latitude": 26.3448578, "longitude": 80.4527173 },
+    "source": "User-provided Google Maps satellite screenshots, 2026-08-20"
+  },
+  "locations": [
+    { "id": "main-gate", "name": "Main Gate", "category": "campus-entrance", "relative_zone": "south-west Axis Ave approach", "confidence": "user-confirmed" },
+    { "id": "architecture", "name": "Axis Institute of Architecture", "category": "academic", "relative_zone": "north-west", "confidence": "confirmed-label" },
+    { "id": "fashion", "name": "Axis Institute of Fashion Technology", "category": "academic", "relative_zone": "north-west", "confidence": "confirmed-label" },
+    { "id": "hospital", "name": "Axis Hospital and Research Center", "category": "health", "relative_zone": "west", "confidence": "confirmed-label" },
+    { "id": "park", "name": "Axis Park", "category": "open-space", "relative_zone": "north", "confidence": "confirmed-label" },
+    { "id": "canteen", "name": "Axis Colleges Canteen/Cafeteria", "category": "food", "relative_zone": "central-north", "confidence": "confirmed-label-and-pin" },
+    { "id": "axis-colleges", "name": "Axis Colleges", "category": "academic", "relative_zone": "central-south-west", "confidence": "confirmed-label" },
+    { "id": "diploma", "name": "Axis Institute of Diploma Engineering", "category": "academic", "relative_zone": "south-east", "confidence": "confirmed-label" },
+    { "id": "pharmacy", "name": "Axis Institute of Pharmacy", "category": "academic", "relative_zone": "east", "confidence": "confirmed-label" },
+    { "id": "sports-courts", "name": "Outdoor sports courts", "category": "sports", "relative_zone": "south-east", "confidence": "visible-satellite" },
+    { "id": "bus-yard", "name": "Bus parking yard", "category": "transport", "relative_zone": "north-east", "confidence": "visible-satellite" },
+    { "id": "workshop", "name": "Axis College Workshop", "category": "workshop", "relative_zone": "north-west", "confidence": "confirmed-label" },
+    { "id": "library", "name": "Central Library", "category": "academic", "relative_zone": "central", "confidence": "estimated" },
+    { "id": "admin-block", "name": "Administrative Block", "category": "administrative", "relative_zone": "central-west", "confidence": "estimated" },
+    { "id": "auditorium", "name": "Auditorium and Seminar Hall", "category": "event", "relative_zone": "central-east", "confidence": "estimated" },
+    { "id": "hostel", "name": "Student Hostel", "category": "residential", "relative_zone": "south", "confidence": "estimated" },
+    { "id": "computer-center", "name": "Computer Center and Labs", "category": "academic", "relative_zone": "east-central", "confidence": "estimated" },
+    { "id": "security-office", "name": "Security Office", "category": "security", "relative_zone": "south-west", "confidence": "estimated" },
+    { "id": "parking-zone", "name": "Visitor Parking Zone", "category": "transport", "relative_zone": "south-west", "confidence": "estimated" },
+    { "id": "medical-room", "name": "Medical Room / First Aid Center", "category": "health", "relative_zone": "central-south", "confidence": "estimated" }
+  ],
+  "roads": [
+    { "id": "axis-ave", "name": "Axis Ave", "type": "internal-road", "confidence": "confirmed-label" },
+    { "id": "ah1", "name": "Varanasi–Kanpur Road (AH1/NH-2)", "type": "external-road", "confidence": "confirmed-label" }
+  ]
+}

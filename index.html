@@ -1,0 +1,167 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#075f56" />
+    <title>Axis Campus Navigator</title>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://maps.googleapis.com" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles.css?v=2" />
+    <link rel="stylesheet" href="fallback.css?v=2" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="identity">
+          <span class="logo">A</span>
+          <span>AXIS <b>NAVIGATOR</b></span>
+        </div>
+
+        <p class="campus">Axis Knowledge City · Rooma, Kanpur</p>
+        <h1>Find places. Know the way.</h1>
+        <p class="intro">Outdoor campus navigation using the real satellite-layout landmarks.</p>
+
+        <div class="search-panel">
+          <label for="placeSearch">Search campus</label>
+          <input id="placeSearch" type="search" placeholder="Search buildings, food, sports..." />
+          <div id="filterChips" class="filter-chips" aria-label="Place filters"></div>
+        </div>
+
+        <form id="routeForm">
+          <div class="field-block">
+            <label for="start">I am at</label>
+            <select id="start"></select>
+          </div>
+
+          <button id="swap" type="button" aria-label="Swap locations">⇅</button>
+
+          <div class="field-block">
+            <label for="destination">I want to go to</label>
+            <select id="destination"></select>
+          </div>
+
+          <button class="primary" type="submit">Get campus route →</button>
+        </form>
+
+        <div class="quick-picks">
+          <div class="quick-header">
+            <span>Popular stops</span>
+            <button id="shuffleRoute" type="button">Surprise me</button>
+          </div>
+          <div id="quickRoutes" class="quick-routes"></div>
+        </div>
+
+        <section class="result">
+          <small>CAMPUS ROUTE</small>
+          <h2 id="routeTitle">Select a route</h2>
+          <p id="routeStats">Choose two places to see the outdoor route.</p>
+          <ol id="routeSteps"></ol>
+          <a id="googleRoute" target="_blank" rel="noreferrer">Open in Google Maps ↗</a>
+        </section>
+
+        <footer>
+          <button id="locateMe" type="button">⌖ Use my location</button>
+          <button id="showPlaces" type="button">☷ Campus places</button>
+        </footer>
+      </aside>
+
+      <div class="admin-controls">
+        <button id="adminToggle" type="button">🔐 Admin login</button>
+        <button id="adminLogout" type="button" style="display:none">🔓 Logout</button>
+        <span id="modeBadge" class="mode-badge">Mode: Student</span>
+      </div>
+
+      <main>
+        <div class="toolbar">
+          <span class="toolbar-label"><i></i> Real-world campus layout</span>
+          <label class="map-type-control" for="mapType">
+            Map view
+            <select id="mapType" disabled>
+              <option value="hybrid">Satellite + labels</option>
+              <option value="satellite">Satellite</option>
+              <option value="roadmap">Roadmap</option>
+            </select>
+          </label>
+          <button id="resetMap" type="button">Reset map</button>
+        </div>
+
+        <div id="mapCanvas">
+          <div id="googleMap" aria-hidden="true"></div>
+          <div id="map"></div>
+          <p id="mapStatus" class="map-status" role="status">Google Maps needs a key in config.local.js; showing satellite fallback.</p>
+        </div>
+
+        <div id="fallbackMap" aria-hidden="true">
+          <b>AXIS KNOWLEDGE CITY</b>
+          <span class="site arch">Architecture</span>
+          <span class="site fashion">Fashion Tech</span>
+          <span class="site canteen">Canteen</span>
+          <span class="site colleges">Axis Colleges</span>
+          <span class="site diploma">Diploma Engg.</span>
+          <span class="site pharmacy">Pharmacy</span>
+          <span class="site sports">Sports Courts</span>
+          <span class="site park">Axis Park</span>
+          <span class="site bus">Bus Yard</span>
+          <em>Offline campus-layout backup</em>
+        </div>
+
+      </main>
+    </div>
+
+    <dialog id="placesDialog">
+      <header>
+        <h2>Campus places</h2>
+        <button id="closeDialog" type="button">×</button>
+      </header>
+      <p>Confirmed from the supplied satellite map labels and visible campus areas.</p>
+      <ul id="placesList"></ul>
+    </dialog>
+
+    <div id="toast"></div>
+
+    <script src="config.local.js"></script>
+    <script>
+      window.axisGoogleMapsReady = new Promise(resolve => {
+        const key = window.AXIS_GOOGLE_MAPS_API_KEY;
+        if (!key) {
+          resolve(false);
+          return;
+        }
+
+        let settled = false;
+        const finish = available => {
+          if (settled) return;
+          settled = true;
+          resolve(available);
+        };
+        const script = document.createElement('script');
+        script.async = true;
+        script.onerror = () => {
+          console.error('Google Maps JavaScript API failed to load. Check the key, API restrictions, billing, and network access.');
+          finish(false);
+        };
+        window.initAxisGoogleMaps = () => finish(Boolean(window.google?.maps?.Map));
+        const params = new URLSearchParams({
+          key,
+          callback: 'initAxisGoogleMaps',
+          loading: 'async',
+          v: 'weekly'
+        });
+        script.src = `https://maps.googleapis.com/maps/api/js?${params}`;
+        document.head.append(script);
+        window.setTimeout(() => {
+          if (!settled) {
+            console.error('Google Maps JavaScript API did not finish loading.');
+            finish(false);
+          }
+        }, 15000);
+      });
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
